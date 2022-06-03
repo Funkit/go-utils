@@ -75,3 +75,24 @@ func PrintMemUsage() {
 func bToMb(b uint64) uint64 {
 	return b / 1024 / 1024
 }
+
+func CastNumberAsFloat64(val any) (float64, error) {
+	switch v1 := val.(type) {
+	case float32:
+		return float64(v1), nil
+	case float64:
+		return float64(v1), nil
+	case int:
+		return float64(v1), nil
+	case int8:
+		return float64(v1), nil
+	case int16:
+		return float64(v1), nil
+	case int32:
+		return float64(v1), nil
+	case int64:
+		return float64(v1), nil
+	default:
+		return 0, fmt.Errorf("item %v cannot be cast as float64", val)
+	}
+}
