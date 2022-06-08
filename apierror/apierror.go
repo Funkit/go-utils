@@ -61,9 +61,9 @@ func Wrap(err error, apiErr *APIError) error {
 }
 
 func Handle(w http.ResponseWriter, r *http.Request, err error) {
+	log.Println(err.Error())
 	serverError := &ServerError{}
 	if errors.As(err, &serverError) {
-		log.Print(err.Error())
 		render.Render(w, r, serverError.apiErr)
 	} else {
 		render.Render(w, r, ErrInternal)
