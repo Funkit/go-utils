@@ -96,3 +96,10 @@ func CastNumberAsFloat64(val any) (float64, error) {
 		return 0, fmt.Errorf("item %v cannot be cast as float64", val)
 	}
 }
+
+// IsALetter Check if char is an ASCII letter or not
+func IsALetter(element byte) bool {
+	val := ((element >= 'a') && (element <= 'z')) || ((element >= 'A') && (element <= 'Z'))
+
+	return val
+}
