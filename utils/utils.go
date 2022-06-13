@@ -103,3 +103,24 @@ func IsALetter(element byte) bool {
 
 	return val
 }
+
+//AppendIfNew add item to string array if not already in slice
+func AppendIfNew(strList []string, newItem string) []string {
+	_, found := Find(strList, newItem)
+	if !found {
+		strList = append(strList, newItem)
+	}
+
+	return strList
+}
+
+// Find takes a slice and looks for an element in it. If found it will
+// return it's key, otherwise it will return -1 and a bool of false.
+func Find(slice []string, val string) (int, bool) {
+	for i, item := range slice {
+		if item == val {
+			return i, true
+		}
+	}
+	return -1, false
+}
