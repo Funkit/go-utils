@@ -1,10 +1,12 @@
 package utils
 
 import (
+	"bufio"
 	"encoding/json"
 	"fmt"
 	"gopkg.in/yaml.v3"
 	"io/ioutil"
+	"os"
 	"runtime"
 )
 
@@ -123,4 +125,39 @@ func Find(slice []string, val string) (int, bool) {
 		}
 	}
 	return -1, false
+}
+
+//GetFileAsLines reads a file and return the content as a string array.
+//
+//If some processed lines are longer than 65536 characters, maxLineLength needs to be added as an argument.
+func GetFileAsLines(filePath string, maxLineLength ...int) ([]string, error) {
+	readFile, err := os.Open(filePath)
+	if err != nil {
+		return nil, err
+	}
+	defer readFile.Close()
+
+	fileScanner := bufio.NewScanner(readFile)
+
+	var buf []byte
+	if len(maxLineLength) != 0 {
+		buf = make([]byte, maxLineLength[0])
+		fileScanner.Buffer(buf, maxLineLength[0])
+	}
+
+	fileScanner.Split(bufio.ScanLines)
+
+	var fileLines []string
+	for fileScanner.Scan() {
+		fileLines = append(fileLines, fileScanner.Text())
+	}
+
+	if err := fileScanner.Err(); err != nil {
+		return nil, err
+	}
+
+	output := make([]string, len(fileLines))
+	copy(output, fileLines)
+
+	return output, nil
 }
