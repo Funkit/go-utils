@@ -1,6 +1,9 @@
 package utils
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 func TestValueEqual(t *testing.T) {
 
@@ -44,5 +47,44 @@ func TestValueEqual(t *testing.T) {
 	float64Val5 := float64Val2 + 1
 	if res := ValueEqual[float64](&float64Val4, &float64Val5); res != false {
 		t.Errorf("ValueEqual() = %v, want %v", res, false)
+	}
+}
+
+func TestGetFileAsLines(t *testing.T) {
+	type args struct {
+		filePath      string
+		maxLineLength []int
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    []string
+		wantErr bool
+	}{
+		{
+			name: "default working case",
+			args: args{
+				filePath:      "../samples/sample1.txt",
+				maxLineLength: []int{65536},
+			},
+			want: []string{
+				"This is line 1",
+				"Here is line 2",
+				"Finally line 3",
+			},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := GetFileAsLines(tt.args.filePath, tt.args.maxLineLength...)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("GetFileAsLines() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("GetFileAsLines() got = %v, want %v", got, tt.want)
+			}
+		})
 	}
 }
