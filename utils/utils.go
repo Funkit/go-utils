@@ -6,8 +6,10 @@ import (
 	"fmt"
 	"gopkg.in/yaml.v3"
 	"io/ioutil"
+	"math/rand"
 	"os"
 	"runtime"
+	"time"
 )
 
 //GenericJSONParsing Parse into struct
@@ -160,4 +162,9 @@ func GetFileAsLines(filePath string, maxLineLength ...int) ([]string, error) {
 	copy(output, fileLines)
 
 	return output, nil
+}
+
+func GenerateRandomInt(min, max int) int {
+	rand.Seed(time.Now().UnixNano())
+	return rand.Intn(max-min) + min
 }
